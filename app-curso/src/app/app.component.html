@@ -1,11 +1,22 @@
-<h1>
-  hello user to
-  <span class="label label-default"> {{ title }}</span>
-</h1>
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12">
+      <h1>
+        hello user to
+        <span class="label label-default"> {{ title }}</span>
+      </h1>
+      <h3>I'm in the App component!</h3>
+
+      <input type="text" [(ngModel)]="name" />
+      <p>{{ name }}</p>
+
+      <br>
+
+      <app-servers></app-servers>
+      <!-- <div app-servers></div> -->
+      <!-- <div class='app-servers'></div> -->
 
 
-
-<input type="text" [(ngModel)]="name">
-<p>
-  {{ name }}
-</p>
+    </div>
+  </div>
+</div>
