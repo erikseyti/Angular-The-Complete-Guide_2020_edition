@@ -1,0 +1,42 @@
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12">
+      <ol>
+        <li>Add A button which says 'Display Details'</li>
+        <li>
+          Add a paragraph with any content of your choice (e.g. 'Secret Password
+          = tuna')
+        </li>
+        <li>
+          Toggle the displaying of that paragraph with the button created in the
+          first step
+        </li>
+        <li>
+          Log all button clicks in an array and output that array below the
+          secret paragraph (maybe log a timestamp or simply an incrementing
+          number)
+        </li>
+        <li>
+          Starting at the 5th log item, give all future log items a blue
+          background (via ngStyle) and white color (ngClass)
+        </li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12">
+      <button (click)="trocarVisibilidade()" class="btn btn-primary">Display Details</button>
+      <p [ngClass]='{invisivel: displayPassword == true}'> Secret Password = 'tuna'</p>
+      <!-- {{ displayPassword }} -->
+      <!-- {{ contadorLogs }}
+      {{ displayLog }} -->
+    <div *ngFor="let log of displayLog; let i = index">
+      <p [ngStyle]="{backgroundColor: corDeFundo(i)}"
+      [ngClass]='{quintoOuMaiorElemento: i >=4}'>{{ log }}</p>
+    </div>
+    </div>
+  </div>
+</div>
