@@ -8,7 +8,7 @@ export class RecipeService {
   recipeSelected = new EventEmitter<Recipe>();
 
   private recipes: Recipe[] = [
-    new Recipe('Pork Stake with veggies',
+    new Recipe('Pork Stake with Veggies',
     'Is good for you!',
     'https://cdn.pixabay.com/photo/2016/06/15/19/09/food-1459693_960_720.jpg',
     [
@@ -32,6 +32,10 @@ export class RecipeService {
 
   getRecipes(){
     return this.recipes.slice();
+  }
+
+  getRecipe(id: number) {
+    return this.recipes[id];
   }
 
   addIngredientsToShoppingList(ingredients: Ingredient[]){
