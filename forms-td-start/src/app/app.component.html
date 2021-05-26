@@ -49,6 +49,17 @@
           [(ngModel)]='answer'></textarea>
         </div>
         <p>Your reply: {{ answer }}</p>
+        <div class='radio' *ngFor='let gender of genders'>
+          <label>
+            <input
+            type='radio'
+            name='gender'
+            ngModel
+            [value]='gender'
+            required>
+            {{gender}}
+          </label>
+        </div>
         <!-- <p *ngIf='' >Please enter a valid value!</p> -->
         <button
         class="btn btn-primary"
