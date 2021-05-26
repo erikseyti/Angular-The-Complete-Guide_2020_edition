@@ -23,7 +23,9 @@
             ngModel
             name='email'
             required
-            email>
+            email
+            #email='ngModel'>
+            <span class='help-block label label-warning' *ngIf='!email.valid && email.touched' >Please Enter a valid Email</span>
           </div>
         </div>
         <div class="form-group">
