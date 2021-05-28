@@ -1,0 +1,15 @@
+#table{
+  top: 50px;
+}
+#form{
+  background-color: whitesmoke;
+  padding: 20px;
+}
+
+#formButton{
+  margin-top: 10px;
+}
+
+#subscriptionLabel{
+  padding-right: 5px;
+}
