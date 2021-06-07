@@ -39,4 +39,10 @@ export class ShoppingListService {
       this.ingredientsChanged.next(this.ingredients.slice());
     }
 
+    deleteIngredient(index: number) {
+      // splice let as start at a specific point and remove that item (splicing it)
+      this.ingredients.splice(index, 1);
+      this.ingredientsChanged.next(this.ingredients.slice());
+    }
+
 }
