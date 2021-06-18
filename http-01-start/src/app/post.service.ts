@@ -11,7 +11,8 @@ export class PostService {
   createAndStorePost(title: string, content: string){
         const postData: Post = {title: title, content: content}
         // URL provided by the firebase Database by Google
-        this.http.post<{name: string}>('https://ng-complete-course-3787b-default-rtdb.firebaseio.com/posts.json',
+        this.http.post<{name: string}>(
+          'https://ng-complete-course-3787b-default-rtdb.firebaseio.com/posts.json',
         postData).subscribe(responseData => {
           console.log(responseData);
         });
@@ -30,7 +31,10 @@ export class PostService {
       return postsArray;
     })
     );
+  }
 
+  deletePosts() {
+    return this.http.delete('https://ng-complete-course-3787b-default-rtdb.firebaseio.com/posts.json')
   }
 
 }
