@@ -1,3 +1,4 @@
+import { PostService } from './post.service';
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators'
@@ -12,46 +13,35 @@ export class AppComponent implements OnInit {
   loadedPosts = [];
   isFetching = false;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient,
+    private postService:PostService) {}
 
   ngOnInit() {
-    this.fetchPost()
+    this.isFetching = true;
+    this.postService.fetchPosts().subscribe(posts => {
+      this.isFetching = false;
+      this.loadedPosts = posts;
+    });
   }
 
   onCreatePost(postData: Post) {
     // Send Http request
     console.log(postData);
-    // URL provided by the firebase Database by Google
-    this.http.post<{name: string}>('https://ng-complete-course-3787b-default-rtdb.firebaseio.com/posts.json',
-    postData).subscribe(responseData => {
-      console.log(responseData);
-    });
+    this.postService.createAndStorePost(postData.title, postData.content);
+
   }
 
   onFetchPosts() {
     // Send Http request
-    this.fetchPost()
+    this.isFetching = true;
+    this.postService.fetchPosts().subscribe(posts => {
+      this.isFetching = false;
+      this.loadedPosts = posts;
+    });
   }
 
   onClearPosts() {
     // Send Http request
   }
 
-  private fetchPost() {
-    this.isFetching = true
-    this.http.get<{[key: string]: Post}>('https://ng-complete-course-3787b-default-rtdb.firebaseio.com/posts.json')
-    .pipe(map( (responseData) => {
-      const postsArray: Post[] = [];
-      for (const key in responseData){
-        if (responseData.hasOwnProperty(key)) {
-          postsArray.push({...responseData[key], id: key})
-        }}
-      return postsArray;
-    }))
-    .subscribe((posts)=> {
-      this.isFetching = false;
-      //console.log(posts);
-      this.loadedPosts = posts;
-    });
-  }
 }
