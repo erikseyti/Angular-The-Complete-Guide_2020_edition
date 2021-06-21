@@ -35,7 +35,8 @@ export class PostService {
     return this.http.get<{[key: string]: Post}>('https://ng-complete-course-3787b-default-rtdb.firebaseio.com/posts.json',
     {
       headers: new HttpHeaders({"Custom-Header": 'Hello'}),
-      params: searchParms
+      params: searchParms,
+      responseType: 'json'
       // single param passing to HttpRequest
       //params: new HttpParams().set('print', 'pretty')
     }
@@ -57,7 +58,8 @@ export class PostService {
   deletePosts() {
     return this.http.delete('https://ng-complete-course-3787b-default-rtdb.firebaseio.com/posts.json',
     {
-      observe: 'events'
+      observe: 'events',
+      responseType: 'text'
     }
     ).pipe(tap(event => {
       console.log(event);
