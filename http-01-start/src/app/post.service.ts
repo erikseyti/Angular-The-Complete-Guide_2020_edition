@@ -1,7 +1,7 @@
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams, HttpEventType } from '@angular/common/http';
 import { Injectable } from "@angular/core";
 import { Subject, throwError } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import { map, catchError, tap } from 'rxjs/operators';
 import { Post } from './post.model';
 
 @Injectable({providedIn: 'root'})
@@ -15,7 +15,12 @@ export class PostService {
         // URL provided by the firebase Database by Google
         this.http.post<{name: string}>(
           'https://ng-complete-course-3787b-default-rtdb.firebaseio.com/posts.json',
-        postData).subscribe(responseData => {
+        postData,
+        {
+          observe: 'response'
+        }
+
+        ).subscribe(responseData => {
           console.log(responseData);
         }, error => {
           this.error.next(error.message);
@@ -50,7 +55,19 @@ export class PostService {
   }
 
   deletePosts() {
-    return this.http.delete('https://ng-complete-course-3787b-default-rtdb.firebaseio.com/posts.json')
+    return this.http.delete('https://ng-complete-course-3787b-default-rtdb.firebaseio.com/posts.json',
+    {
+      observe: 'events'
+    }
+    ).pipe(tap(event => {
+      console.log(event);
+      if (event.type === HttpEventType.Sent){
+        // ...
+      }
+      if(event.type === HttpEventType.Response) {
+        console.log(event.body);
+      }
+    }));
   }
 
 }
