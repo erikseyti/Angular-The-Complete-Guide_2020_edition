@@ -1,3 +1,4 @@
+import { loggingInterceptorService } from './logging-interceptor.service';
 import { AuthInterceptorService } from './auth-interceptor.serivce';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
@@ -10,11 +11,18 @@ import { AppComponent } from './app.component';
   declarations: [AppComponent],
   imports: [BrowserModule, FormsModule, HttpClientModule],
   providers:
-  [{
+  [
+  {
     provide: HTTP_INTERCEPTORS,
     useClass: AuthInterceptorService,
     multi: true
-  }],
+  },
+  {
+    provide: HTTP_INTERCEPTORS,
+    useClass: loggingInterceptorService,
+    multi: true
+  }
+],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
