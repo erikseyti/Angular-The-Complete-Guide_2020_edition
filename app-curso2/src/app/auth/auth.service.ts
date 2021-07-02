@@ -1,7 +1,9 @@
-import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from "@angular/core";
-import { throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { throwError, BehaviorSubject } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
+import { User } from './user.model';
 
 export interface AuthResponseData{
   idToken: string;
@@ -15,8 +17,11 @@ export interface AuthResponseData{
 
 @Injectable({providedIn: 'root'})
 export class AuthService {
+  user = new BehaviorSubject<User>(null);
 
-  constructor(private http: HttpClient) {}
+
+  constructor(private http: HttpClient,
+              private router: Router) {}
 
   signUp(email: string, password: string) {
     // Get the key on Firebase configuration on yout project
@@ -25,18 +30,11 @@ export class AuthService {
       password: password,
       returnSecureToken: true
       }
-    ).pipe(catchError(errorResponse => {
-      let errorMessage = 'an Unknow error ocurred!'
-      if (!errorResponse.error || !errorResponse.error.error){
-
-        return throwError(errorMessage);
-      }
-      switch (errorResponse.error.error.message) {
-        case 'EMAIL_EXISTS':
-          errorMessage = 'this email already exists.'
-      }
-
-      return throwError(errorMessage);
+    ).pipe(
+      catchError(
+        this.handleError
+    ), tap(responseData => {
+      this.handleAuthentication(responseData.email, responseData.localId, responseData.idToken ,+responseData.expiresIn);
     }));
   }
 
@@ -46,6 +44,47 @@ export class AuthService {
       email: email,
       password: password,
       returnSecureToken: true
-    });
+    }).pipe(
+      catchError(
+        this.handleError
+    ), tap(responseData => {
+      this.handleAuthentication(responseData.email, responseData.localId, responseData.idToken ,+responseData.expiresIn);
+    }));
+  }
+
+  logout() {
+    this.user.next(null);
+    this.router.navigate(['/auth']);
+  }
+
+  private handleAuthentication(email: string, userId: string , token: string, expiresIn: number) {
+    const experationDate = new Date(new Date().getTime() + (+expiresIn*1000));
+    const user = new User(
+      email,
+      userId,
+      token,
+      experationDate);
+      this.user.next(user);
+  }
+
+  private handleError(errorResponse: HttpErrorResponse) {
+    let errorMessage = 'an Unknow error ocurred!'
+      if (!errorResponse.error || !errorResponse.error.error){
+
+        return throwError(errorMessage);
+      }
+      switch (errorResponse.error.error.message) {
+        case 'EMAIL_EXISTS':
+          errorMessage = 'This email already exists.';
+          break;
+        case 'EMAIL_NOT_FOUND':
+          errorMessage = 'This email does not exists.';
+          break;
+        case 'INVALID_PASSWORD':
+          errorMessage = 'This password is not correct.';
+          break;
+      }
+
+      return throwError(errorMessage);
   }
 }
