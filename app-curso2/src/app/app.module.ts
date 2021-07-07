@@ -1,3 +1,4 @@
+import { AuthModule } from './auth/auth.module';
 import { CoreModule } from './core.module';
 import { SharedModule } from './shared/shared.module';
 import { BrowserModule } from '@angular/platform-browser';
@@ -16,17 +17,15 @@ import { AppRoutingModule } from './app-routing.module';
 @NgModule({
   declarations: [
     AppComponent,
-    HeaderComponent,
-    AuthComponent
+    HeaderComponent
   ],
   imports: [
     BrowserModule,
-    FormsModule,
-    ReactiveFormsModule,
     HttpClientModule,
     AppRoutingModule,
     RecipesModule,
     ShoppingListModule,
+    AuthModule,
     SharedModule,
     CoreModule
   ],
