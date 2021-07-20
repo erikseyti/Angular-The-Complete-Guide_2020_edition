@@ -1,3 +1,4 @@
+import { LoggingService } from './../logging.service';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
@@ -17,7 +18,9 @@ import { SharedModule } from './../shared/shared.module';
     { path: '', component: ShoppingListComponent },
   ]),
   SharedModule
-]
+],
+// will create a new instance of LoggingService from the app.module.ts
+// providers: [LoggingService]
 })
 export class ShoppingListModule {
 

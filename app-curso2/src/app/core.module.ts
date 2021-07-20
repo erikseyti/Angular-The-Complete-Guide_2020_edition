@@ -1,3 +1,4 @@
+import { LoggingService } from './logging.service';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { AuthInterceptorService } from './auth/auth-interceptor.service';
@@ -10,7 +11,8 @@ import { ShoppingListService } from './shopping-list/shopping-list.service';
     RecipeService, {
     provide: HTTP_INTERCEPTORS,
     useClass: AuthInterceptorService,
-    multi: true}
+    multi: true},
+    // LoggingService
   ]
 })
 export class CoreModule{}
