@@ -1,5 +1,4 @@
 import { Subscription } from 'rxjs';
-import { ShoppingListService } from './../shopping-list.service';
 import { Ingredient } from './../../shared/ingredient.model';
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
@@ -19,7 +18,7 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
   editItem: Ingredient;
 
 
-  constructor(private slService: ShoppingListService, private store: Store<fromShoppingList.AppState>) { }
+  constructor( private store: Store<fromShoppingList.AppState>) { }
 
   ngOnInit(): void {
     this.subscription = this.store.select('shoppingList').subscribe(stateData => {
