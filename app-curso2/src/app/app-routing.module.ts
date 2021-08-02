@@ -15,7 +15,9 @@ const appRoutes: Routes = [
   loadChildren: () => import('./shopping-list/shopping-list.module').then(m => m.ShoppingListModule)
 
 },
-  {path: 'auth', loadChildren: './auth/auth.module#AuthModule'}
+  {path: 'auth',
+  loadChildren: () => import('./auth/auth.module'
+  ).then(m => m.AuthModule)}
 ];
 
 @NgModule({
