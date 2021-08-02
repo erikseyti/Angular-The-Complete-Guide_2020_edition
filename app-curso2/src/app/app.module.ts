@@ -8,7 +8,7 @@ import { StoreModule } from '@ngrx/store';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { AppRoutingModule } from './app-routing.module';
-import * as fromApp from './store/app.reducer'
+import * as fromApp from './store/app.reducer';
 
 @NgModule({
   declarations: [

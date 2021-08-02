@@ -5,6 +5,9 @@ import { throwError, BehaviorSubject } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { User } from './user.model';
 import { environment } from 'src/environments/environment';
+import { Store } from '@ngrx/store';
+import * as fromApp from '../store/app.reducer';
+import * as AuthActions from './store/auth.actions';
 
 export interface AuthResponseData{
   idToken: string;
@@ -18,12 +21,13 @@ export interface AuthResponseData{
 
 @Injectable({providedIn: 'root'})
 export class AuthService {
-  user = new BehaviorSubject<User>(null);
+  // user = new BehaviorSubject<User>(null);
   private tokenExpirationTimer: any;
 
 
   constructor(private http: HttpClient,
-              private router: Router) {}
+              private router: Router,
+              private store: Store<fromApp.AppState>) {}
 
   signUp(email: string, password: string) {
     // Get the key on Firebase configuration on yout project
@@ -73,7 +77,12 @@ export class AuthService {
     );
 
     if(loadedUser.token) {
-      this.user.next(loadedUser);
+      // this.user.next(loadedUser);
+      this.store.dispatch(new AuthActions.Login({
+        email: loadedUser.email,
+        userId: loadedUser.id,
+        token: loadedUser.token,
+        expirationDate: new Date(userData._tokenExpirationDate)}));
       const expirationDuration = new Date(userData._tokenExpirationDate).getTime() - new Date().getTime();
       this.autoLogout(expirationDuration);
     }
@@ -81,7 +90,8 @@ export class AuthService {
   }
 
   logout() {
-    this.user.next(null);
+    // this.user.next(null);
+    this.store.dispatch(new AuthActions.Logout());
     this.router.navigate(['/auth']);
     // Remove todos os dados do localStorage
     // localStorage.clear();
@@ -95,7 +105,7 @@ export class AuthService {
   autoLogout(expirationDuration: number) {
     this.tokenExpirationTimer =  setTimeout(() => {
       this.logout();
-    }, expirationDuration)
+    }, expirationDuration);
   }
 
   private handleAuthentication(email: string, userId: string , token: string, expiresIn: number) {
@@ -105,18 +115,24 @@ export class AuthService {
       userId,
       token,
       experationDate);
-      this.user.next(user);
-      this.autoLogout(expiresIn * 1000);
-      localStorage.setItem('userData', JSON.stringify(user));
+      // this.user.next(user);
+    this.store.dispatch(new AuthActions.Login(
+        {email: email,
+          userId: userId,
+          token: token,
+          expirationDate: experationDate
+        }));
+    this.autoLogout(expiresIn * 1000);
+    localStorage.setItem('userData', JSON.stringify(user));
   }
 
   private handleError(errorResponse: HttpErrorResponse) {
-    let errorMessage = 'an Unknow error ocurred!'
-      if (!errorResponse.error || !errorResponse.error.error){
+    let errorMessage = 'an Unknow error ocurred!';
+    if (!errorResponse.error || !errorResponse.error.error){
 
         return throwError(errorMessage);
       }
-      switch (errorResponse.error.error.message) {
+    switch (errorResponse.error.error.message) {
         case 'EMAIL_EXISTS':
           errorMessage = 'This email already exists.';
           break;
@@ -128,6 +144,6 @@ export class AuthService {
           break;
       }
 
-      return throwError(errorMessage);
+    return throwError(errorMessage);
   }
 }
