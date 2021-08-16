@@ -1,6 +1,5 @@
 import { Actions, ofType } from '@ngrx/effects';
 import { RecipeService } from './recipe.service';
-import { DataStorageService } from './../shared/data-storage.service';
 import { Injectable } from "@angular/core";
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from "@angular/router";
 import { Recipe } from "./recipe.model";
@@ -25,7 +24,6 @@ export class RecipesResolverService implements Resolve<Recipe[]> {
       }),
       switchMap(recipes => {
         if (recipes.length === 0 ){
-          // return this.dataStorageService.fetchRecipes();
           this.store.dispatch(new RecipeActions.FetchRecipes());
           return this.actions$.pipe(ofType(RecipeActions.SET_RECIPES), take(1));
         }
