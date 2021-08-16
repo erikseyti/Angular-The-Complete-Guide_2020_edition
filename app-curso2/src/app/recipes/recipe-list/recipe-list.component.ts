@@ -3,7 +3,6 @@ import { Component, EventEmitter, OnInit, Output, OnDestroy } from '@angular/cor
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { Recipe } from '../recipe.model';
-import { RecipeService } from '../recipe.service';
 import { Store } from '@ngrx/store';
 import * as fromApp from '../../store/app.reducer';
 import { map } from 'rxjs/operators';
