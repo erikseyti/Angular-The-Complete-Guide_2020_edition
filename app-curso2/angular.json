@@ -121,5 +121,8 @@
       }
     }
   },
-  "defaultProject": "app-curso2"
+  "defaultProject": "app-curso2",
+  "cli": {
+    "defaultCollection": "@ngrx/schematics"
+  }
 }

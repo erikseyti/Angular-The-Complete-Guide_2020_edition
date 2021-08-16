@@ -2,7 +2,7 @@ import { User } from './../user.model';
 import { Router } from '@angular/router';
 import { AuthService } from './../auth.service';
 import { HttpClient } from '@angular/common/http';
-import { Actions, Effect, ofType } from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import * as AuthActions from './auth.actions';
 import { environment } from 'src/environments/environment';
@@ -59,8 +59,8 @@ const handleError = (errorRes: any) => {
 
 @Injectable()
 export class AuthEffects {
-  @Effect()
-  authSignUp = this.actions$.pipe(
+  
+  authSignUp = createEffect(() => this.actions$.pipe(
     ofType(AuthActions.SIGNUP_START),
     switchMap((signUpAction: AuthActions.SignupStart) => {
       return this.http
@@ -93,10 +93,10 @@ export class AuthEffects {
           })
         );
     })
-  );
+  ));
 
-  @Effect()
-  authLogin = this.actions$.pipe(
+  
+  authLogin = createEffect(() => this.actions$.pipe(
     ofType(AuthActions.LOGIN_START),
     switchMap((authData: AuthActions.LoginStart) => {
       return this.http
@@ -129,30 +129,30 @@ export class AuthEffects {
           })
         );
     })
-  );
+  ));
 
-  @Effect({ dispatch: false })
-  AuthRedirect = this.actions$.pipe(
+  
+  AuthRedirect = createEffect(() => this.actions$.pipe(
     ofType(AuthActions.AUTHENTICATE_SUCCESS),
     tap((authSucessAction: AuthActions.AuthenticateSuccess) => {
       if (authSucessAction.payload.redirect) {
         this.router.navigate(['/']);
       }
     })
-  );
+  ), { dispatch: false });
 
-  @Effect({ dispatch: false })
-  authLogout = this.actions$.pipe(
+  
+  authLogout = createEffect(() => this.actions$.pipe(
     ofType(AuthActions.LOGOUT),
     tap(() => {
       this.authService.clearLogoutTimer();
       localStorage.removeItem('userData');
       this.router.navigate(['/auth']);
     })
-  );
+  ), { dispatch: false });
 
-  @Effect()
-  autoLogin = this.actions$.pipe(
+  
+  autoLogin = createEffect(() => this.actions$.pipe(
     ofType(AuthActions.AUTO_LOGIN),
     map(() => {
       const userData: {
@@ -191,7 +191,7 @@ export class AuthEffects {
       }
       return { type: 'DUMMY' };
     })
-  );
+  ));
 
   constructor(
     private actions$: Actions,
