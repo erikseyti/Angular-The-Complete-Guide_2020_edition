@@ -21,9 +21,9 @@ const appRoutes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(appRoutes,
-    // prealodingStrategy para o angular os modulos faltando do lazy loading no background.
-    {preloadingStrategy: PreloadAllModules})],
+  imports: [RouterModule.forRoot(appRoutes, 
+// prealodingStrategy para o angular os modulos faltando do lazy loading no background.
+{ preloadingStrategy: PreloadAllModules, initialNavigation: 'enabled' })],
   exports: [RouterModule]
 })
 export class AppRoutingModule {
