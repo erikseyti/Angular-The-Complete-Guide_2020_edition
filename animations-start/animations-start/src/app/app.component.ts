@@ -158,4 +158,12 @@ export class AppComponent {
     this.list.splice(this.list.indexOf(item), 1);
   }
 
+  animationStarted(event) {
+    console.log(event);
+  }
+
+  animationEnded(event) {
+    console.log(event);
+  }
+
 }
